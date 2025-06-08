@@ -25,6 +25,7 @@
     .options label {
       display: block;
       margin-left: 20px;
+      cursor: pointer;
     }
     input[type="text"], textarea {
       width: 100%;
@@ -38,6 +39,30 @@
     textarea {
       height: 80px;
     }
+    .answer-feedback {
+      margin-top: 5px;
+      font-weight: bold;
+    }
+    .correct {
+      color: green;
+    }
+    .wrong {
+      color: red;
+    }
+    button#checkAnswersBtn {
+      display: block;
+      margin: 20px auto 40px auto;
+      padding: 10px 20px;
+      font-size: 1.1em;
+      background-color: #004466;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button#checkAnswersBtn:hover {
+      background-color: #006699;
+    }
   </style>
 </head>
 <body>
@@ -47,56 +72,65 @@
 <div class="section">
   <h2>Phần 1: Trắc nghiệm (Chọn đáp án đúng)</h2>
 
-  <div class="question">
+  <div class="question" data-correct="A">
     <p>1. 田中さんは　＿＿＿ですか。</p>
     <div class="options">
-      <label><input type="radio" name="q1"> A. いしゃ</label>
-      <label><input type="radio" name="q1"> B. いしゃを</label>
-      <label><input type="radio" name="q1"> C. いしゃが</label>
-      <label><input type="radio" name="q1"> D. いしゃに</label>
+      <label><input type="radio" name="q1" value="A"> A. いしゃ</label>
+      <label><input type="radio" name="q1" value="B"> B. いしゃを</label>
+      <label><input type="radio" name="q1" value="C"> C. いしゃが</label>
+      <label><input type="radio" name="q1" value="D"> D. いしゃに</label>
     </div>
+    <div class="answer-feedback"></div>
   </div>
 
-  <div class="question">
+  <div class="question" data-correct="A">
     <p>2. 昨日、友達＿＿＿会いました。</p>
     <div class="options">
-      <label><input type="radio" name="q2"> A. に</label>
-      <label><input type="radio" name="q2"> B. で</label>
-      <label><input type="radio" name="q2"> C. を</label>
-      <label><input type="radio" name="q2"> D. が</label>
+      <label><input type="radio" name="q2" value="A"> A. に</label>
+      <label><input type="radio" name="q2" value="B"> B. で</label>
+      <label><input type="radio" name="q2" value="C"> C. を</label>
+      <label><input type="radio" name="q2" value="D"> D. が</label>
     </div>
+    <div class="answer-feedback"></div>
   </div>
 
-  <div class="question">
+  <div class="question" data-correct="D">
     <p>3. コーヒー＿＿＿飲みますか。</p>
     <div class="options">
-      <label><input type="radio" name="q3"> A. か</label>
-      <label><input type="radio" name="q3"> B. と</label>
-      <label><input type="radio" name="q3"> C. は</label>
-      <label><input type="radio" name="q3"> D. を</label>
+      <label><input type="radio" name="q3" value="A"> A. か</label>
+      <label><input type="radio" name="q3" value="B"> B. と</label>
+      <label><input type="radio" name="q3" value="C"> C. は</label>
+      <label><input type="radio" name="q3" value="D"> D. を</label>
     </div>
+    <div class="answer-feedback"></div>
   </div>
 
-  <div class="question">
+  <div class="question" data-correct="D">
     <p>4. あの人は　どなた＿＿＿。</p>
     <div class="options">
-      <label><input type="radio" name="q4"> A. に</label>
-      <label><input type="radio" name="q4"> B. が</label>
-      <label><input type="radio" name="q4"> C. は</label>
-      <label><input type="radio" name="q4"> D. です</label>
+      <label><input type="radio" name="q4" value="A"> A. に</label>
+      <label><input type="radio" name="q4" value="B"> B. が</label>
+      <label><input type="radio" name="q4" value="C"> C. は</label>
+      <label><input type="radio" name="q4" value="D"> です</label>
     </div>
+    <div class="answer-feedback"></div>
   </div>
 
-  <div class="question">
+  <div class="question" data-correct="C">
     <p>5. 毎日　７時に　＿＿＿。</p>
     <div class="options">
-      <label><input type="radio" name="q5"> A. 起きました</label>
-      <label><input type="radio" name="q5"> B. 起きて</label>
-      <label><input type="radio" name="q5"> C. 起きます</label>
-      <label><input type="radio" name="q5"> D. 起きる</label>
+      <label><input type="radio" name="q5" value="A"> A. 起きました</label>
+      <label><input type="radio" name="q5" value="B"> B. 起きて</label>
+      <label><input type="radio" name="q5" value="C"> C. 起きます</label>
+      <label><input type="radio" name="q5" value="D"> D. 起きる</label>
     </div>
+    <div class="answer-feedback"></div>
   </div>
+
+  <button id="checkAnswersBtn">Kiểm tra đáp án</button>
 </div>
+
+<!-- Phần 2, 3, 4 giữ nguyên như bạn đã viết -->
 
 <div class="section">
   <h2>Phần 2: Điền từ vào chỗ trống</h2>
@@ -170,6 +204,27 @@
     <textarea placeholder="Viết lại câu..."></textarea>
   </div>
 </div>
+
+<script>
+  document.getElementById('checkAnswersBtn').addEventListener('click', () => {
+    const questions = document.querySelectorAll('.section:nth-child(2) .question'); // Phần 1 là section thứ 2 trong body
+    questions.forEach(q => {
+      const correct = q.getAttribute('data-correct');
+      const selected = q.querySelector('input[type="radio"]:checked');
+      const feedback = q.querySelector('.answer-feedback');
+      if (!selected) {
+        feedback.textContent = 'Bạn chưa chọn đáp án.';
+        feedback.className = 'answer-feedback wrong';
+      } else if (selected.value === correct) {
+        feedback.textContent = 'Đáp án đúng!';
+        feedback.className = 'answer-feedback correct';
+      } else {
+        feedback.textContent = `Sai rồi! Đáp án đúng là: ${correct}`;
+        feedback.className = 'answer-feedback wrong';
+      }
+    });
+  });
+</script>
 
 </body>
 </html>
